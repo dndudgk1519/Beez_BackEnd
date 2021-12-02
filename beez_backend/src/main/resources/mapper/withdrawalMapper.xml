@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.blockb.beez.dao.WithdrawalDao">
+	<insert id="withdrawalHistory" parameterType="map">
+		INSERT INTO WITHDRAW VALUES(WITHDRAW_SEQ.NEXTVAL, (SELECT user_id FROM MEMBER WHERE wallet_address = #{userAddress}), #{amount}, SYSDATE+9/24, #{txHash})
+    </insert>
+	<select id="withdrawHistoryList" resultType="com.blockb.beez.dto.WithdrawalHistoryDto">
+		SELECT amount, tx_Hash txHash, withdraw_date withdrawDate FROM WITHDRAW WHERE user_id = #{userId} AND (TO_NUMBER(withdraw_date-TO_DATE('01-01-1970 09:00:00', 'DD-MM-YYYY HH24:MI:SS'))*24*60*60) <![CDATA[>=]]> #{startDate} AND (TO_NUMBER(withdraw_date-TO_DATE('01-01-1970 09:00:00', 'DD-MM-YYYY HH24:MI:SS'))*24*60*60) <![CDATA[<=]]> #{endDate} order by withdraw_date desc
+	</select>
+</mapper>

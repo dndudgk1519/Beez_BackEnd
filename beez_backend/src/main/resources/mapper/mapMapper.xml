@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.blockb.beez.dao.MapDao">
+    <!-- 모든 가게로딩 -->
+    <select id="getStoreList" parameterType = "double" resultType="com.blockb.beez.dto.MapDto">
+        SELECT  a.wallet_address as walletAddress ,a.nickName, b.lat, b.lon, (6371*acos(cos(radians(lat))*cos(radians(#{mylat}))*cos(radians(lon) -radians(#{mylon}))+sin(radians(lat))*sin(radians(#{mylat})))) AS distance FROM member a join store b on a.user_id = b.user_id WHERE (6371*acos(cos(radians(lat))*cos(radians(#{mylat}))*cos(radians(lon) -radians(#{mylon}))+sin(radians(lat))*sin(radians(#{mylat})))) <![CDATA[<=]]> 1 ORDER BY distance
+    </select>   
+
+</mapper>

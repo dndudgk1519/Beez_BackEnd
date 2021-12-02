@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.blockb.beez.dao.nonceCheckDao">
+    <insert id="nonceCheck" parameterType="String">
+        INSERT INTO NONCE (id, request_id, used_nonce, prefix)
+        VALUES (NONCE_SEQ.NEXTVAL, #{nonceReqId}, #{usedNonce}, #{prefix})
+    </insert>
+    <select id="lastNonce" resultType="Integer">
+        SELECT MAX(used_nonce) FROM NONCE
+    </select>
+    <update id="nonceStausUpdate" parameterType="map">
+        UPDATE NONCE SET status = #{status} WHERE request_id = #{requestId} AND status = 'pending'
+    </update>
+</mapper>

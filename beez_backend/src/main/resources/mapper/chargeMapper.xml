@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.blockb.beez.dao.ChargeDao">
+	<insert id="chargeHistory" parameterType="map">
+		INSERT INTO CHARGE VALUES(CHARGE_SEQ.NEXTVAL, (SELECT user_id FROM MEMBER WHERE wallet_address = #{userAddress}), #{chargeAmount}, #{chargeInc}, #{txHash}, SYSDATE+9/24)
+    </insert>
+	<select id="historyList" resultType="com.blockb.beez.dto.HistoryDto">
+		SELECT charge_amount chargeAmount, charge_Inc chargeInc, tx_Hash txHash, charge_date chargeDate FROM CHARGE WHERE user_id = #{userId} AND (TO_NUMBER(charge_date-TO_DATE('01-01-1970 09:00:00', 'DD-MM-YYYY HH24:MI:SS'))*24*60*60) <![CDATA[>=]]> #{startDate} AND (TO_NUMBER(charge_date-TO_DATE('01-01-1970 09:00:00', 'DD-MM-YYYY HH24:MI:SS'))*24*60*60) <![CDATA[<=]]> #{endDate} order by charge_date desc
+	</select>
+</mapper>
